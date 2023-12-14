@@ -11,7 +11,8 @@ instruction_t instruction_list[] = {
         {"push", push},
         {"pop", pop},
         {"pall", pall},
-	{"pint", pint}
+		{"pint", pint},
+		{"pop", pop}
 };
 
 int execute_instruction(char *opcode, stack_t **stack, unsigned int line_number)
@@ -27,7 +28,7 @@ int execute_instruction(char *opcode, stack_t **stack, unsigned int line_number)
 		}
 	}
 	fprintf(stderr, "L%d: unknown instruction %s\n", line_number, opcode);
-	return (EXIT_FAILURE);
+	exit(EXIT_FAILURE);
 }
 
 /**
@@ -44,7 +45,7 @@ void push(stack_t **stack, __attribute__((unused)) unsigned int line_number)
 	if (!new_node)
 	{
 		fprintf(stderr, "Error: malloc failed\n");
-		return;
+		exit(EXIT_FAILURE);
 	}
 	new_node->n = data;
 	new_node->next = NULL;
@@ -77,7 +78,7 @@ void pop(stack_t **stack, unsigned int line_number)
 	if ((*stack) == NULL)
 	{
 		fprintf(stderr, "L%d: can't pop an empty stack\n", line_number);
-		return;
+		exit(EXIT_FAILURE);
 	}
 	temp = (*stack);
 	if (temp->next == NULL)
@@ -112,12 +113,12 @@ void pall(stack_t **stack, __attribute__((unused)) unsigned int line_number)
 		return;
 	current = (*stack);
 
-	while (current->prev != NULL)
-		current = current->prev;
+	while (current->next != NULL) 
+		current = current->next;
 	while (current != NULL)
 	{
 		printf("%d\n", current->n);
-		current = current->next;
+		current = current->prev;
 	}
 }
 
@@ -132,7 +133,7 @@ void pint(stack_t **stack, unsigned int line_number)
 	if ((*stack) == NULL)
 	{
 		fprintf(stderr, "L%d: can't pint, stack empty\n", line_number);
-		return;
+		exit(EXIT_FAILURE);
 	}
 	if ((*stack)->next != NULL)
 		(*stack) = (*stack)->next;

@@ -13,7 +13,7 @@ void parse_buffer(char *buffer, char *opcode, char *parameters, unsigned int *li
 	if((strcmp(parameters, "") == 0) || parameters[0] < 48 || parameters [0] > 57)
 	{
 		fprintf(stderr,"L%d: usage: push integer\n", *line_number);
-		return;
+		exit(EXIT_FAILURE);
 	}
 
 	(*data) = atoi(parameters);

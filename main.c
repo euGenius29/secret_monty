@@ -18,38 +18,38 @@ int main(int argc, char *argv[])
 	FILE *file;
 
 	line_number = 0;
-	filename = argv[1];
-	filename_lenght = strlen(filename);
-
+	
 	if (argc != 2)
 	{
 		fprintf(stderr, "USAGE: monty file\n");
-		return (EXIT_FAILURE);
+		exit(EXIT_FAILURE);
 	}
-
+	filename = argv[1];
+	filename_lenght = strlen(filename);
 	if (strcmp(filename + filename_lenght - 2, ".m") != 0)
 	{
 		fprintf(stderr, "USAGE: monty file\n");
-		return (EXIT_FAILURE);
+		exit(EXIT_FAILURE);
 	}
 
 	file = fopen(argv[1], "r");
 	if (!file)
 	{
 		fprintf(stderr, "Error: Can't open file %s\n", filename);
-		return (EXIT_FAILURE);
+		exit(EXIT_FAILURE);
 	}
 
 	while (fgets(buffer, sizeof(buffer), file) != NULL)
 	{
-		memset(opcode, '\0', sizeof(opcode));
+		memset(opcode, '\0', sizeof(opcode));		
 		parse_buffer(buffer, opcode, parameters, &line_number, &data);
 		if (strcmp(opcode, "") == 0)
+	{
 			continue;
+	}
 		if (execute_instruction(opcode, &stack, line_number) != EXIT_SUCCESS)
 			return (EXIT_FAILURE);
 	}
-	printf("all codes in file executed\n");
 	fclose(file);
 	return (EXIT_SUCCESS);
 
