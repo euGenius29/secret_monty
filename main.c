@@ -2,11 +2,10 @@
 
 /**
  * main - accepts file as input and parses it on to execute commands
- * @argc - argument count on command line
- * @argv - argument values passed
+ * @argc: argument count on command line
+ * @argv: argument values passed
  * Return: 0 on succesd, -1 on error
  */
-
 int data = 0;
 int main(int argc, char *argv[])
 {
@@ -14,19 +13,16 @@ int main(int argc, char *argv[])
 	stack_t *stack = NULL;
 	unsigned int line_number;
 	const char *filename;
-	size_t filename_lenght;
 	FILE *file;
 
 	line_number = 0;
-	
 	if (argc != 2)
 	{
 		fprintf(stderr, "USAGE: monty file\n");
 		exit(EXIT_FAILURE);
 	}
 	filename = argv[1];
-	filename_lenght = strlen(filename);
-	if (strcmp(filename + filename_lenght - 2, ".m") != 0)
+	if (filename[0] == '(')
 	{
 		fprintf(stderr, "USAGE: monty file\n");
 		exit(EXIT_FAILURE);
@@ -38,10 +34,9 @@ int main(int argc, char *argv[])
 		fprintf(stderr, "Error: Can't open file %s\n", filename);
 		exit(EXIT_FAILURE);
 	}
-
 	while (fgets(buffer, sizeof(buffer), file) != NULL)
 	{
-		memset(opcode, '\0', sizeof(opcode));		
+		memset(opcode, '\0', sizeof(opcode));
 		parse_buffer(buffer, opcode, parameters, &line_number, &data);
 		if (strcmp(opcode, "") == 0)
 	{
@@ -50,6 +45,8 @@ int main(int argc, char *argv[])
 		if (execute_instruction(opcode, &stack, line_number) != EXIT_SUCCESS)
 			return (EXIT_FAILURE);
 	}
+	pop_all(stack);
+
 	fclose(file);
 	return (EXIT_SUCCESS);
 

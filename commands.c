@@ -6,36 +6,39 @@
  * @stack: appropriate opcode command to execute
  * @line_number: line number in file
  */
-
 instruction_t instruction_list[] = {
-        {"push", push},
-        {"pop", pop},
-        {"pall", pall},
-		{"pint", pint},
-		{"pop", pop}
+	{"push", push},
+	{"pop", pop},
+	{"pall", pall},
+	{"pint", pint},
+	{"swap", swap},
+	{"sub", sub},
+	{"add", add},
+	{"nop", nop}
 };
 
-int execute_instruction(char *opcode, stack_t **stack, unsigned int line_number)
+int execute_instruction(char *opcode, stack_t **stack,
+		unsigned int line_number)
 {
 	size_t i, j;
-	j = sizeof(instruction_list)/sizeof(instruction_list[0]);
+
+	j = sizeof(instruction_list) / sizeof(instruction_list[0]);
 	for (i = 0; i < j; ++i)
 	{
 		if (strcmp(opcode, instruction_list[i].opcode) == 0)
 		{
 			instruction_list[i].f(stack, line_number);
-			return(EXIT_SUCCESS);
+			return (EXIT_SUCCESS);
 		}
 	}
 	fprintf(stderr, "L%d: unknown instruction %s\n", line_number, opcode);
 	exit(EXIT_FAILURE);
 }
-
 /**
  * push - pushes data to the top of the stack.
- * @stack: pointer to the head 
+ * @stack: pointer to the head
  * @line_number: line number in file.
- * Return: void
+ * Return void
  */
 void push(stack_t **stack, __attribute__((unused)) unsigned int line_number)
 {
@@ -95,9 +98,10 @@ void pop(stack_t **stack, unsigned int line_number)
 		temp = temp->next;
 	}
 
-	if(previous != NULL)
+	if (previous != NULL)
+	{
 		previous->next = NULL;
-
+	}
 	free(temp);
 }
 /**
@@ -109,12 +113,14 @@ void pop(stack_t **stack, unsigned int line_number)
 void pall(stack_t **stack, __attribute__((unused)) unsigned int line_number)
 {
 	stack_t *current;
+
 	if ((*stack) == NULL)
 		return;
 	current = (*stack);
-
-	while (current->next != NULL) 
+	while (current->next != NULL)
+	{
 		current = current->next;
+	}
 	while (current != NULL)
 	{
 		printf("%d\n", current->n);

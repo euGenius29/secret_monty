@@ -4,7 +4,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
-#include <fcntl.h>
+#include <ctype.h>
 #include <string.h>
 
 /**
@@ -40,9 +40,9 @@ typedef struct instruction_s
 
 extern int data;
 
-int _accept(char **buffer, size_t *bytes_read);
-char **_tokenize(char *str, char *delimiter);
-int _token_count(char *str, char *delimiter);
+void pop_all(stack_t *stack);
+int valid_integer(const char *str);
+int count_stacks(stack_t **stack);
 void parse_buffer(char *buffer, char *opcode, char *parameters, unsigned int *line_number, int *data);
 int execute_instruction(char *opcode, stack_t **stack, unsigned int line_number);
 
@@ -51,5 +51,10 @@ void push(stack_t **stack, unsigned int line_number);
 void pop(stack_t **stack, unsigned int line_number);
 void pall(stack_t **stack, unsigned int line_number);
 void pint(stack_t **stack, unsigned int line_number);
+void swap(stack_t **stack, unsigned int line_number);
+void sub(stack_t **stack, unsigned int line_number);
+void add(stack_t **stack, unsigned int line_number);
+void nop(stack_t **stack, unsigned int line_number);
+
 
 #endif
